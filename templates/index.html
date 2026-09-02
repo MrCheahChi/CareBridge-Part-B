@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareBridge Hospital</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <header>
+        <h1>CareBridge Hospital</h1>
+        <p>Hospital Management System</p>
+    </header>
+
+    <main class="welcome-card">
+        <h2>Welcome</h2>
+
+        <p>
+            Use the CareBridge Hospital Management System
+            to access hospital services.
+        </p>
+
+ <a
+    class="button-link"
+    href="{{ url_for('book_appointment') }}"
+>
+    Book an Appointment
+</a>
+    </main>
+</body>
+</html>

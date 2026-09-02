@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Appointment | CareBridge Hospital</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <main class="booking-card">
+        <h1>Book an Appointment</h1>
+
+        <p>
+            Select a department and an appointment date.
+            Appointments must be more than seven days from today.
+        </p>
+
+        {% if error %}
+            <div class="message error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if booking %}
+            <div class="message success">
+                <h2>Appointment Confirmed</h2>
+                <p><strong>Department:</strong> {{ booking.department }}</p>
+                <p><strong>Date:</strong> {{ booking.date }}</p>
+                <p>Your appointment was booked successfully.</p>
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="department">Department</label>
+
+                <select
+                    id="department"
+                    name="department"
+                    required
+                >
+                    <option value="">Select a department</option>
+
+                    <option
+                        value="GP"
+                        {% if department == "GP" %}selected{% endif %}
+                    >
+                        GP
+                    </option>
+
+                    <option
+                        value="Specialist"
+                        {% if department == "Specialist" %}selected{% endif %}
+                    >
+                        Specialist
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_date">
+                    Appointment Date
+                </label>
+
+                <input
+                    type="date"
+                    id="appointment_date"
+                    name="appointment_date"
+                    min="{{ minimum_date }}"
+                    value="{{ appointment_text }}"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                Confirm Appointment
+            </button>
+        </form>
+
+        <a class="back-link" href="{{ url_for('home') }}">
+            Return to Home
+        </a>
+    </main>
+</body>
+</html>

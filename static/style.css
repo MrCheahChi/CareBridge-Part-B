@@ -1,0 +1,154 @@
+:root {
+    --deep-teal: #075c66;
+    --teal: #168b91;
+    --sage: #a9c7b5;
+    --ivory: #f8f6ee;
+    --gold: #c9a85b;
+    --text: #17383b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background:
+        linear-gradient(
+            135deg,
+            var(--ivory),
+            #dceee8
+        );
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    margin-bottom: 8px;
+    color: var(--deep-teal);
+    font-size: 42px;
+}
+
+header p {
+    margin: 0;
+    color: #587775;
+    font-size: 18px;
+}
+
+.welcome-card {
+    max-width: 650px;
+    margin: auto;
+    padding: 45px;
+    text-align: center;
+    background-color: white;
+    border: 2px solid var(--gold);
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(7, 92, 102, 0.15);
+}
+
+.welcome-card h2 {
+    color: var(--teal);
+    font-size: 30px;
+}
+
+.welcome-card p {
+    margin: 20px 0 30px;
+    line-height: 1.6;
+}
+
+button {
+    padding: 13px 25px;
+    color: white;
+    background-color: var(--deep-teal);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--teal);
+}
+
+.button-link {
+    display: inline-block;
+    padding: 13px 25px;
+    color: white;
+    background-color: var(--deep-teal);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.button-link:hover {
+    background-color: var(--teal);
+}
+
+.booking-card {
+    max-width: 700px;
+    margin: auto;
+    padding: 40px;
+    background-color: white;
+    border: 2px solid var(--gold);
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(7, 92, 102, 0.15);
+}
+
+.booking-card h1 {
+    margin-top: 0;
+    color: var(--deep-teal);
+}
+
+.form-group {
+    margin: 24px 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--sage);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.message {
+    margin: 20px 0;
+    padding: 18px;
+    border-radius: 10px;
+}
+
+.message.error {
+    color: #8a2424;
+    background-color: #ffe7e7;
+    border-left: 5px solid #c74646;
+}
+
+.message.success {
+    color: #174f42;
+    background-color: #e4f5ed;
+    border-left: 5px solid var(--teal);
+}
+
+.message.success h2 {
+    margin-top: 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    color: var(--deep-teal);
+}
