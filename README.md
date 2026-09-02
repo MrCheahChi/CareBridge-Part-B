@@ -16,3 +16,10 @@ from a command-line program into a web-based application.
 - Flask
 - HTML
 - CSS
+
+## How to Run the Application
+
+1. Install the required packages:
+
+   ```text
+   py -m pip install -r requirements.txt
