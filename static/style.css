@@ -119,11 +119,13 @@ button:hover {
 }
 
 .form-group select,
-.form-group input {
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 13px;
     border: 1px solid var(--sage);
     border-radius: 8px;
+    font-family: Arial, sans-serif;
     font-size: 16px;
 }
 
@@ -181,6 +183,33 @@ button:hover {
 .bill-total {
     color: var(--deep-teal);
     font-size: 20px;
+}
+
+.triage-result {
+    margin-top: 30px;
+}
+
+.priority-badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.low-priority {
+    color: #245b38;
+    background-color: #dff2e5;
+}
+
+.medium-priority {
+    color: #745000;
+    background-color: #fff0bd;
+}
+
+.high-priority {
+    color: #8a2424;
+    background-color: #ffe0e0;
 }
 
 .back-link {

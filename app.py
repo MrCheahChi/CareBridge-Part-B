@@ -217,5 +217,79 @@ def calculate_bill():
         tests_text=tests_text,
     )
 
+
+@app.route("/assign-triage-room", methods=["GET", "POST"])
+def assign_triage_room():
+    error = None
+    triage = None
+    patient_id = ""
+    symptoms = ""
+    severity_text = ""
+
+    if request.method == "POST":
+        patient_id = request.form.get("patient_id", "").strip().upper()
+        symptoms = request.form.get("symptoms", "").strip()
+        severity_text = request.form.get("severity", "").strip()
+
+        valid_patient_id = (
+            len(patient_id) == 5
+            and patient_id[0] in ("Y", "N")
+            and patient_id[1] == "-"
+            and patient_id[2:].isdigit()
+        )
+
+        if not valid_patient_id:
+            error = "Patient ID must use the format Y-001 or N-001."
+
+        elif not symptoms:
+            error = "Please enter the patient's main symptoms."
+
+        elif len(symptoms) > 250:
+            error = "Symptoms must not exceed 250 characters."
+
+        elif not severity_text.isdigit():
+            error = "Severity level must be a whole number from 1 to 10."
+
+        elif int(severity_text) < 1 or int(severity_text) > 10:
+            error = "Severity level must be between 1 and 10."
+
+        else:
+            severity = int(severity_text)
+
+            if severity <= 4:
+                room = "Waiting Room"
+                category = "Low Priority"
+                category_class = "low-priority"
+                instruction = "Please wait until your patient ID is called."
+            elif severity <= 7:
+                room = "Room 1"
+                category = "Medium Priority"
+                category_class = "medium-priority"
+                instruction = "Please proceed to Room 1 for assessment."
+            else:
+                room = "Room 2"
+                category = "High Priority"
+                category_class = "high-priority"
+                instruction = "Please proceed immediately to Room 2."
+
+            triage = {
+                "patient_id": patient_id,
+                "symptoms": symptoms,
+                "severity": severity,
+                "room": room,
+                "category": category,
+                "category_class": category_class,
+                "instruction": instruction,
+            }
+
+    return render_template(
+        "triage.html",
+        error=error,
+        triage=triage,
+        patient_id=patient_id,
+        symptoms=symptoms,
+        severity_text=severity_text,
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)
