@@ -19,13 +19,18 @@ def home():
 @app.route("/book-appointment", methods=["GET", "POST"])
 def book_appointment():
     error = None
-    booking = None
+    patient_id = ""
     department = ""
     appointment_text = ""
+    appointment_time = ""
 
     minimum_date = date.today() + timedelta(days=8)
 
     if request.method == "POST":
+        patient_id = request.form.get(
+            "patient_id", ""
+        ).strip().upper()
+
         department = request.form.get(
             "department", ""
         ).strip()
@@ -34,11 +39,35 @@ def book_appointment():
             "appointment_date", ""
         ).strip()
 
-        if department not in ("GP", "Specialist"):
+        appointment_time = request.form.get(
+            "appointment_time", ""
+        ).strip()
+
+        valid_patient_id = (
+            len(patient_id) == 5
+            and patient_id[0] in ("Y", "N")
+            and patient_id[1] == "-"
+            and patient_id[2:].isdigit()
+        )
+
+        available_times = {
+            "09:00": "9:00 AM",
+            "11:00": "11:00 AM",
+            "14:00": "2:00 PM",
+            "16:00": "4:00 PM",
+        }
+
+        if not valid_patient_id:
+            error = "Patient ID must use the format Y-001 or N-001."
+
+        elif department not in ("GP", "Specialist"):
             error = "Please select GP or Specialist."
 
         elif not appointment_text:
             error = "Please select an appointment date."
+
+        elif appointment_time not in available_times:
+            error = "Please select an available appointment time."
 
         else:
             try:
@@ -58,22 +87,42 @@ def book_appointment():
                         "seven days from today."
                     )
                 else:
+                    if department == "GP":
+                        doctor = "Dr. Daniel Tan"
+                        location = "General Outpatient Clinic - Room 5"
+                    else:
+                        doctor = "Dr. Aisha Rahman"
+                        location = "Specialist Centre - Room 8"
+
+                    booking_reference = (
+                        f"CB-{appointment_date.strftime('%Y%m%d')}-"
+                        f"{patient_id.replace('-', '')}"
+                    )
+
                     booking = {
+                        "patient_id": patient_id,
                         "department": department,
                         "date": appointment_date.strftime(
                             "%d/%m/%Y"
                         ),
+                        "time": available_times[appointment_time],
+                        "doctor": doctor,
+                        "location": location,
+                        "reference": booking_reference,
                     }
 
-                    department = ""
-                    appointment_text = ""
+                    return render_template(
+                        "appointment_details.html",
+                        booking=booking,
+                    )
 
     return render_template(
         "booking.html",
         error=error,
-        booking=booking,
+        patient_id=patient_id,
         department=department,
         appointment_text=appointment_text,
+        appointment_time=appointment_time,
         minimum_date=minimum_date.isoformat(),
     )
 

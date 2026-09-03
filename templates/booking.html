@@ -17,7 +17,7 @@
         <h1>Book an Appointment</h1>
 
         <p>
-            Select a department and an appointment date.
+            Enter the patient details and select an appointment slot.
             Appointments must be more than seven days from today.
         </p>
 
@@ -27,16 +27,26 @@
             </div>
         {% endif %}
 
-        {% if booking %}
-            <div class="message success">
-                <h2>Appointment Confirmed</h2>
-                <p><strong>Department:</strong> {{ booking.department }}</p>
-                <p><strong>Date:</strong> {{ booking.date }}</p>
-                <p>Your appointment was booked successfully.</p>
-            </div>
-        {% endif %}
-
         <form method="POST">
+            <div class="form-group">
+                <label for="patient_id">Patient ID</label>
+
+                <input
+                    type="text"
+                    id="patient_id"
+                    name="patient_id"
+                    value="{{ patient_id }}"
+                    pattern="[YNyn]-[0-9]{3}"
+                    placeholder="Example: Y-001"
+                    title="Use the format Y-001 or N-001."
+                    required
+                >
+
+                <small class="form-help">
+                    Enter the ID generated during patient registration.
+                </small>
+            </div>
+
             <div class="form-group">
                 <label for="department">Department</label>
 
@@ -76,6 +86,24 @@
                     value="{{ appointment_text }}"
                     required
                 >
+            </div>
+
+            <div class="form-group">
+                <label for="appointment_time">
+                    Preferred Appointment Time
+                </label>
+
+                <select
+                    id="appointment_time"
+                    name="appointment_time"
+                    required
+                >
+                    <option value="">Select a time</option>
+                    <option value="09:00" {% if appointment_time == "09:00" %}selected{% endif %}>9:00 AM</option>
+                    <option value="11:00" {% if appointment_time == "11:00" %}selected{% endif %}>11:00 AM</option>
+                    <option value="14:00" {% if appointment_time == "14:00" %}selected{% endif %}>2:00 PM</option>
+                    <option value="16:00" {% if appointment_time == "16:00" %}selected{% endif %}>4:00 PM</option>
+                </select>
             </div>
 
             <button type="submit">
