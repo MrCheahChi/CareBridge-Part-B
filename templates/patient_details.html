@@ -48,30 +48,16 @@
                     {{ patient.priority }}
                 </p>
 
-                <p>
-                    <strong>Department:</strong>
-                    {{ patient.department }}
-                </p>
-
-                <p>
-                    <strong>Meeting Location:</strong>
-                    {{ patient.location }}
-                </p>
-
-                <p>
-                    <strong>Assigned Doctor:</strong>
-                    {{ patient.doctor }}
-                </p>
             </div>
 
             <a class="button-link"
-               href="{{ url_for('register_patient') }}">
-                Register Another Patient
+               href="{{ url_for('book_appointment') }}">
+                Continue to Book Appointment
             </a>
 
             <a class="back-link"
-               href="{{ url_for('home') }}">
-                Back to Home
+               href="{{ url_for('start_new_patient') }}">
+                Start Over
             </a>
         </main>
     </div>

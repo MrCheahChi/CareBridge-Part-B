@@ -46,6 +46,7 @@
                         pattern="[YNyn]-[0-9]{3}"
                         placeholder="Example: Y-001"
                         title="Use the format Y-001 or N-001."
+                        readonly
                         required
                     >
 
@@ -107,6 +108,10 @@
                     <p><strong>Subtotal:</strong> ${{ "%.2f"|format(bill.subtotal) }}</p>
                     <p><strong>Discount:</strong> -${{ "%.2f"|format(bill.discount) }}</p>
                     <p class="bill-total"><strong>Total Amount:</strong> ${{ "%.2f"|format(bill.total) }}</p>
+
+                    <div class="message success">
+                        <strong>Patient workflow completed.</strong>
+                    </div>
                 </div>
             {% endif %}
 
