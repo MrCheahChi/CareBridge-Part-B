@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointment Confirmation</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CareBridge Hospital</h1>
+            <p>Hospital Management System</p>
+        </header>
+
+        <main class="card">
+            <div class="message success">
+                <h2>Appointment Confirmed</h2>
+                <p>Your appointment has been booked successfully.</p>
+            </div>
+
+            <div class="patient-details appointment-details">
+                <h3>Appointment Details</h3>
+
+                <p><strong>Booking Reference:</strong> {{ booking.reference }}</p>
+                <p><strong>Patient ID:</strong> {{ booking.patient_id }}</p>
+                <p><strong>Department:</strong> {{ booking.department }}</p>
+                <p><strong>Appointment Date:</strong> {{ booking.date }}</p>
+                <p><strong>Appointment Time:</strong> {{ booking.time }}</p>
+                <p><strong>Assigned Doctor:</strong> {{ booking.doctor }}</p>
+                <p><strong>Clinic Location:</strong> {{ booking.location }}</p>
+            </div>
+
+            <p class="appointment-note">
+                Please arrive 15 minutes early and bring your Patient ID.
+            </p>
+
+            <a class="button-link" href="{{ url_for('book_appointment') }}">
+                Book Another Appointment
+            </a>
+
+            <a class="back-link" href="{{ url_for('home') }}">
+                Back to Home
+            </a>
+        </main>
+    </div>
+</body>
+</html>
