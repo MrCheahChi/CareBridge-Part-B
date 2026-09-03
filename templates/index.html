@@ -18,33 +18,75 @@
         <p>Hospital Management System</p>
     </header>
 
-    <main class="welcome-card">
-        <h2>Welcome</h2>
+    <main class="workflow-card">
+        <h2>Patient Care Journey</h2>
 
-        <p>
-            Use the CareBridge Hospital Management System
-            to access hospital services.
+        <p class="workflow-introduction">
+            Complete each step in order. Your Patient ID will be carried
+            automatically through the hospital process.
         </p>
 
- <a
-    class="button-link"
-    href="{{ url_for('book_appointment') }}"
->
-    Book an Appointment
-</a>
+        {% if patient_id %}
+            <div class="current-patient">
+                Current Patient ID: <strong>{{ patient_id }}</strong>
+            </div>
+        {% endif %}
 
-<a class="button-link" href="{{ url_for('register_patient') }}">
-    Register Patient
-</a>
+        <div class="workflow-list">
+            <section class="workflow-step {% if workflow_step >= 1 %}completed{% else %}active{% endif %}">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Register Patient</h3>
+                    <p>Create a patient record and receive a Patient ID.</p>
+                    <a class="button-link" href="{{ url_for('start_new_patient') }}">
+                        {% if workflow_step >= 1 %}Register New Patient{% else %}Start Registration{% endif %}
+                    </a>
+                    {% if workflow_step >= 1 %}<span class="step-status">Completed</span>{% endif %}
+                </div>
+            </section>
 
-<a class="button-link" href="{{ url_for('calculate_bill') }}">
-    Calculate Bill
-</a>
+            <section class="workflow-step {% if workflow_step >= 2 %}completed{% elif workflow_step == 1 %}active{% else %}locked{% endif %}">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Book Appointment</h3>
+                    <p>Select the department, date and appointment time.</p>
+                    {% if workflow_step >= 1 %}
+                        <a class="button-link" href="{{ url_for('book_appointment') }}">Book Appointment</a>
+                    {% else %}
+                        <span class="locked-button">Complete Step 1 First</span>
+                    {% endif %}
+                    {% if workflow_step >= 2 %}<span class="step-status">Completed</span>{% endif %}
+                </div>
+            </section>
 
-<a class="button-link" href="{{ url_for('assign_triage_room') }}">
-    Assign Triage Room
-</a>
+            <section class="workflow-step {% if workflow_step >= 3 %}completed{% elif workflow_step == 2 %}active{% else %}locked{% endif %}">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Assign Triage Room</h3>
+                    <p>Record the symptoms and assign a room by severity.</p>
+                    {% if workflow_step >= 2 %}
+                        <a class="button-link" href="{{ url_for('assign_triage_room') }}">Start Triage</a>
+                    {% else %}
+                        <span class="locked-button">Complete Step 2 First</span>
+                    {% endif %}
+                    {% if workflow_step >= 3 %}<span class="step-status">Completed</span>{% endif %}
+                </div>
+            </section>
 
+            <section class="workflow-step {% if workflow_step >= 4 %}completed{% elif workflow_step == 3 %}active{% else %}locked{% endif %}">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Calculate Bill</h3>
+                    <p>Calculate the fees and apply any subsidy discount.</p>
+                    {% if workflow_step >= 3 %}
+                        <a class="button-link" href="{{ url_for('calculate_bill') }}">Calculate Bill</a>
+                    {% else %}
+                        <span class="locked-button">Complete Step 3 First</span>
+                    {% endif %}
+                    {% if workflow_step >= 4 %}<span class="step-status">Completed</span>{% endif %}
+                </div>
+            </section>
+        </div>
     </main>
 </body>
 </html>

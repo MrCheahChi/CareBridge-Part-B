@@ -1,9 +1,14 @@
 from datetime import date, timedelta
+import os
 
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, session, url_for
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.environ.get(
+    "CAREBRIDGE_SECRET_KEY",
+    "carebridge-class-project-key",
+)
 
 patient_numbers = {
     "Y": 0,
@@ -13,13 +18,26 @@ patient_numbers = {
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        workflow_step=session.get("workflow_step", 0),
+        patient_id=session.get("patient_id"),
+    )
+
+
+@app.route("/start-new-patient")
+def start_new_patient():
+    session.clear()
+    return redirect(url_for("register_patient"))
 
 
 @app.route("/book-appointment", methods=["GET", "POST"])
 def book_appointment():
+    if session.get("workflow_step", 0) < 1:
+        return redirect(url_for("register_patient"))
+
     error = None
-    patient_id = ""
+    patient_id = session.get("patient_id", "")
     department = ""
     appointment_text = ""
     appointment_time = ""
@@ -59,6 +77,9 @@ def book_appointment():
 
         if not valid_patient_id:
             error = "Patient ID must use the format Y-001 or N-001."
+
+        elif patient_id != session.get("patient_id"):
+            error = "Please use the Patient ID from your registration."
 
         elif department not in ("GP", "Specialist"):
             error = "Please select GP or Specialist."
@@ -110,6 +131,11 @@ def book_appointment():
                         "location": location,
                         "reference": booking_reference,
                     }
+
+                    session["workflow_step"] = max(
+                        session.get("workflow_step", 1),
+                        2,
+                    )
 
                     return render_template(
                         "appointment_details.html",
@@ -166,26 +192,18 @@ def register_patient():
             patient_numbers[priority] += 1
             patient_id = f"{priority}-{patient_numbers[priority]:03d}"
 
-            if priority == "Y":
-                priority_text = "Urgent"
-                department = "Emergency Department"
-                location = "Emergency Wing - Room 2"
-                doctor = "Dr. Sarah Lim"
-            else:
-                priority_text = "Non-Urgent"
-                department = "General Outpatient Clinic"
-                location = "Outpatient Wing - Room 5"
-                doctor = "Dr. Daniel Tan"
+            priority_text = "Urgent" if priority == "Y" else "Non-Urgent"
 
             patient = {
                 "name": name,
                 "age": int(age_text),
                 "priority": priority_text,
                 "id": patient_id,
-                "department": department,
-                "location": location,
-                "doctor": doctor,
             }
+
+            session.clear()
+            session["patient_id"] = patient_id
+            session["workflow_step"] = 1
 
             return render_template(
                 "patient_details.html",
@@ -203,9 +221,12 @@ def register_patient():
 
 @app.route("/calculate-bill", methods=["GET", "POST"])
 def calculate_bill():
+    if session.get("workflow_step", 0) < 3:
+        return redirect(url_for("assign_triage_room"))
+
     error = None
     bill = None
-    patient_id = ""
+    patient_id = session.get("patient_id", "")
     patient_type = ""
     tests_text = ""
 
@@ -223,6 +244,9 @@ def calculate_bill():
 
         if not valid_patient_id:
             error = "Patient ID must use the format Y-001 or N-001."
+
+        elif patient_id != session.get("patient_id"):
+            error = "Please use the Patient ID from your registration."
 
         elif patient_type not in ("Subsidised", "Private"):
             error = "Please select a valid patient type."
@@ -257,6 +281,8 @@ def calculate_bill():
                 "total": total,
             }
 
+            session["workflow_step"] = 4
+
     return render_template(
         "bill.html",
         error=error,
@@ -269,9 +295,12 @@ def calculate_bill():
 
 @app.route("/assign-triage-room", methods=["GET", "POST"])
 def assign_triage_room():
+    if session.get("workflow_step", 0) < 2:
+        return redirect(url_for("book_appointment"))
+
     error = None
     triage = None
-    patient_id = ""
+    patient_id = session.get("patient_id", "")
     symptoms = ""
     severity_text = ""
 
@@ -289,6 +318,9 @@ def assign_triage_room():
 
         if not valid_patient_id:
             error = "Patient ID must use the format Y-001 or N-001."
+
+        elif patient_id != session.get("patient_id"):
+            error = "Please use the Patient ID from your registration."
 
         elif not symptoms:
             error = "Please enter the patient's main symptoms."
@@ -330,6 +362,11 @@ def assign_triage_room():
                 "category_class": category_class,
                 "instruction": instruction,
             }
+
+            session["workflow_step"] = max(
+                session.get("workflow_step", 2),
+                3,
+            )
 
     return render_template(
         "triage.html",

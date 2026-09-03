@@ -63,6 +63,118 @@ header p {
     line-height: 1.6;
 }
 
+.workflow-card {
+    max-width: 820px;
+    margin: auto;
+    padding: 38px;
+    background-color: white;
+    border: 2px solid var(--gold);
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(7, 92, 102, 0.15);
+}
+
+.workflow-card > h2,
+.workflow-introduction {
+    text-align: center;
+}
+
+.workflow-card > h2 {
+    margin-top: 0;
+    color: var(--deep-teal);
+    font-size: 30px;
+}
+
+.workflow-introduction {
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.current-patient {
+    margin-bottom: 22px;
+    padding: 13px;
+    text-align: center;
+    color: var(--deep-teal);
+    background-color: #e4f5ed;
+    border-radius: 10px;
+}
+
+.workflow-list {
+    display: grid;
+    gap: 16px;
+}
+
+.workflow-step {
+    display: flex;
+    gap: 18px;
+    padding: 22px;
+    background-color: #fbfcf8;
+    border: 2px solid #d9e5df;
+    border-radius: 16px;
+}
+
+.workflow-step.active {
+    background-color: #f6fbf8;
+    border-color: var(--gold);
+    box-shadow: 0 6px 18px rgba(7, 92, 102, 0.10);
+}
+
+.workflow-step.completed {
+    border-color: var(--sage);
+}
+
+.workflow-step.locked {
+    opacity: 0.58;
+}
+
+.step-number {
+    display: flex;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: white;
+    background-color: var(--deep-teal);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h3 {
+    margin: 2px 0 7px;
+    color: var(--deep-teal);
+}
+
+.step-content p {
+    margin: 0 0 13px;
+    line-height: 1.5;
+}
+
+.step-status {
+    display: inline-block;
+    margin-left: 8px;
+    color: #245b38;
+    font-weight: bold;
+}
+
+.step-status::before {
+    content: "✓ ";
+}
+
+.locked-button {
+    display: inline-block;
+    padding: 11px 16px;
+    color: #667270;
+    background-color: #e8ecea;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
 button {
     padding: 13px 25px;
     color: white;
@@ -127,6 +239,13 @@ button:hover {
     border-radius: 8px;
     font-family: Arial, sans-serif;
     font-size: 16px;
+}
+
+.form-group input[readonly] {
+    color: var(--deep-teal);
+    background-color: #eef5f2;
+    font-weight: bold;
+    cursor: not-allowed;
 }
 
 .form-help {
@@ -218,6 +337,31 @@ button:hover {
     background-color: #fff5d6;
     border-left: 5px solid var(--gold);
     border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 34px;
+    }
+
+    .workflow-card,
+    .booking-card,
+    .card {
+        padding: 24px;
+    }
+
+    .workflow-step {
+        padding: 17px;
+    }
+
+    .step-status {
+        display: block;
+        margin: 8px 0 0;
+    }
 }
 
 .back-link {
