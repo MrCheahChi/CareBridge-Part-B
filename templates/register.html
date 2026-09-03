@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register Patient</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CareBridge Hospital</h1>
+            <p>Hospital Management System</p>
+        </header>
+
+        <main class="card">
+            <h2>Register Patient</h2>
+
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="name">Patient Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ name }}"
+                        pattern="[A-Za-z][A-Za-z .'-]*"
+                        title="Use letters only. Spaces, hyphens, apostrophes and periods are allowed."
+                        required
+                    >
+
+                    <small class="form-help">
+                        Please enter a valid name using letters only.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+
+                    <input
+                        type="number"
+                        id="age"
+                        name="age"
+                        min="1"
+                        max="120"
+                        value="{{ age_text }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">
+                        Is the patient urgent?
+                    </label>
+
+                    <select
+                        id="priority"
+                        name="priority"
+                        required
+                    >
+                        <option value="">
+                            Select an option
+                        </option>
+
+                        <option
+                            value="Y"
+                            {% if priority == "Y" %}selected{% endif %}
+                        >
+                            Yes — Urgent
+                        </option>
+
+                        <option
+                            value="N"
+                            {% if priority == "N" %}selected{% endif %}
+                        >
+                            No — Non-Urgent
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Register Patient
+                </button>
+            </form>
+
+            <a class="back-link" href="{{ url_for('home') }}">
+                Back to Home
+            </a>
+        </main>
+    </div>
+</body>
+</html>

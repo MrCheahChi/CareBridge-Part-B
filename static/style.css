@@ -85,13 +85,15 @@ button:hover {
     border: 2px solid var(--gold);
     border-radius: 10px;
     text-decoration: none;
+    margin: 6px;
 }
 
 .button-link:hover {
     background-color: var(--teal);
 }
 
-.booking-card {
+.booking-card,
+.card {
     max-width: 700px;
     margin: auto;
     padding: 40px;
@@ -125,6 +127,13 @@ button:hover {
     font-size: 16px;
 }
 
+.form-help {
+    display: block;
+    margin-top: 7px;
+    color: #587775;
+    font-size: 13px;
+}
+
 .message {
     margin: 20px 0;
     padding: 18px;
@@ -145,6 +154,24 @@ button:hover {
 
 .message.success h2 {
     margin-top: 0;
+}
+
+.patient-details {
+    margin: 24px 0;
+    padding: 22px;
+    background-color: var(--ivory);
+    border: 1px solid var(--sage);
+    border-radius: 12px;
+}
+
+.patient-details h3 {
+    margin-top: 0;
+    color: var(--deep-teal);
+}
+
+.patient-details p {
+    padding: 7px 0;
+    border-bottom: 1px solid #d9e5df;
 }
 
 .back-link {
