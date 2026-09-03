@@ -151,5 +151,71 @@ def register_patient():
         priority=priority,
     )
 
+
+@app.route("/calculate-bill", methods=["GET", "POST"])
+def calculate_bill():
+    error = None
+    bill = None
+    patient_id = ""
+    patient_type = ""
+    tests_text = ""
+
+    if request.method == "POST":
+        patient_id = request.form.get("patient_id", "").strip().upper()
+        patient_type = request.form.get("patient_type", "").strip()
+        tests_text = request.form.get("lab_tests", "").strip()
+
+        valid_patient_id = (
+            len(patient_id) == 5
+            and patient_id[0] in ("Y", "N")
+            and patient_id[1] == "-"
+            and patient_id[2:].isdigit()
+        )
+
+        if not valid_patient_id:
+            error = "Patient ID must use the format Y-001 or N-001."
+
+        elif patient_type not in ("Subsidised", "Private"):
+            error = "Please select a valid patient type."
+
+        elif not tests_text.isdigit():
+            error = "Number of lab tests must be a whole number."
+
+        elif int(tests_text) < 0 or int(tests_text) > 50:
+            error = "Number of lab tests must be between 0 and 50."
+
+        else:
+            number_of_tests = int(tests_text)
+            consultation_fee = 100.00
+            lab_test_fee = number_of_tests * 10.00
+            subtotal = consultation_fee + lab_test_fee
+
+            if patient_type == "Subsidised":
+                discount = subtotal * 0.30
+            else:
+                discount = 0.00
+
+            total = subtotal - discount
+
+            bill = {
+                "patient_id": patient_id,
+                "patient_type": patient_type,
+                "number_of_tests": number_of_tests,
+                "consultation_fee": consultation_fee,
+                "lab_test_fee": lab_test_fee,
+                "subtotal": subtotal,
+                "discount": discount,
+                "total": total,
+            }
+
+    return render_template(
+        "bill.html",
+        error=error,
+        bill=bill,
+        patient_id=patient_id,
+        patient_type=patient_type,
+        tests_text=tests_text,
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)

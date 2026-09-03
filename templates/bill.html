@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculate Patient Bill</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CareBridge Hospital</h1>
+            <p>Hospital Management System</p>
+        </header>
+
+        <main class="card">
+            <h2>Calculate Patient Bill</h2>
+
+            <p>
+                Consultation fee: $100.00<br>
+                Each laboratory test: $10.00<br>
+                Subsidised patients receive a 30% discount.
+            </p>
+
+            {% if error %}
+                <div class="message error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="patient_id">Patient ID</label>
+
+                    <input
+                        type="text"
+                        id="patient_id"
+                        name="patient_id"
+                        value="{{ patient_id }}"
+                        pattern="[YNyn]-[0-9]{3}"
+                        placeholder="Example: Y-001"
+                        title="Use the format Y-001 or N-001."
+                        required
+                    >
+
+                    <small class="form-help">
+                        Enter the ID generated during patient registration.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient_type">Patient Type</label>
+
+                    <select id="patient_type" name="patient_type" required>
+                        <option value="">Select patient type</option>
+                        <option
+                            value="Subsidised"
+                            {% if patient_type == "Subsidised" %}selected{% endif %}
+                        >
+                            Subsidised
+                        </option>
+                        <option
+                            value="Private"
+                            {% if patient_type == "Private" %}selected{% endif %}
+                        >
+                            Private
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="lab_tests">Number of Laboratory Tests</label>
+
+                    <input
+                        type="number"
+                        id="lab_tests"
+                        name="lab_tests"
+                        min="0"
+                        max="50"
+                        value="{{ tests_text }}"
+                        required
+                    >
+
+                    <small class="form-help">
+                        Enter a whole number from 0 to 50.
+                    </small>
+                </div>
+
+                <button type="submit">Calculate Bill</button>
+            </form>
+
+            {% if bill %}
+                <div class="patient-details bill-summary">
+                    <h3>Bill Summary</h3>
+
+                    <p><strong>Patient ID:</strong> {{ bill.patient_id }}</p>
+                    <p><strong>Patient Type:</strong> {{ bill.patient_type }}</p>
+                    <p><strong>Consultation Fee:</strong> ${{ "%.2f"|format(bill.consultation_fee) }}</p>
+                    <p><strong>Laboratory Tests:</strong> {{ bill.number_of_tests }}</p>
+                    <p><strong>Laboratory Test Fee:</strong> ${{ "%.2f"|format(bill.lab_test_fee) }}</p>
+                    <p><strong>Subtotal:</strong> ${{ "%.2f"|format(bill.subtotal) }}</p>
+                    <p><strong>Discount:</strong> -${{ "%.2f"|format(bill.discount) }}</p>
+                    <p class="bill-total"><strong>Total Amount:</strong> ${{ "%.2f"|format(bill.total) }}</p>
+                </div>
+            {% endif %}
+
+            <a class="back-link" href="{{ url_for('home') }}">
+                Back to Home
+            </a>
+        </main>
+    </div>
+</body>
+</html>

@@ -174,6 +174,15 @@ button:hover {
     border-bottom: 1px solid #d9e5df;
 }
 
+.bill-summary {
+    margin-top: 30px;
+}
+
+.bill-total {
+    color: var(--deep-teal);
+    font-size: 20px;
+}
+
 .back-link {
     display: inline-block;
     margin-top: 25px;
